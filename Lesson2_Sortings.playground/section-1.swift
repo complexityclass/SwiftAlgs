@@ -2,30 +2,53 @@
 
 import UIKit
 
-func merge<T: Comparable>(list1: [T], list2: [T]) -> [T] {
-    if list1.count == 0 {
-        return list2
-    
-    } else if list2.count == 0 {
-        return list1
-    
-    } else if list1[0] < list2[0] {
-        return [list1[0]] + merge(Array(list1[1..<list1.count]), list2)
-    }else {
-        return [list2[0]] + merge(list1, Array(list2[1..<list2.count]))
+var list = [9,6,7,3,42,2,78,4,5,67,98,1]
+
+
+func quickSort<T: Comparable>(inout list:[T], start: Int, end: Int) {
+    if end - start < 2 {
+        return
     }
+    
+    var pivot = list[start + (end - start) / 2]
+    var low = start
+    var high = end - 1
+    
+    while(low <= high) {
+        if list[low] < pivot {
+            low += 1
+            continue
+        }
+        
+        if list[high] > pivot {
+            high -= 1
+            continue
+        }
+        
+        let temp = list[low]
+        list[low] = list[high]
+        list[high] = temp
+        
+        low++
+        high--
+    }
+    
+    quickSort(&list, start, high + 1)
+    quickSort(&list, high + 1, end)
 }
 
 
-func mergeSort<T:Comparable>(list: [T]) -> [T] {
-    if list.count < 2 {
-        return list
-    } else {
-        let half = Int(list.count / 2)
-        return merge(mergeSort(Array(list[0..<half])), mergeSort(Array(list[half..<list.count])))
-    }
-}
+quickSort(&list, 0, list.count)
 
-var list = [9,6,7,3,4,2,1,4,5,67,98,1]
 
-mergeSort(list)
+
+
+
+
+
+
+
+
+
+
+
